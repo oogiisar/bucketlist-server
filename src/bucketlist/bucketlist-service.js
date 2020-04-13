@@ -57,19 +57,23 @@ const CleanupsService = {
                 AND 
                     tasks.id = ${task_id}`
             )
-            /*.from('items')
-            .where('items.user_id', '=', user_id)
-            .andWhere('tasks.item', '=', item_id)
-            .andWhere('tasks.id', '=', task_id)
-            .update({
-                completed: completed,
-                thisKeyIsSkipped: undefined
-            })*/
     },
-    insertTask(db, insert) {
+    insertItem(db, user_id, item) {
+        console.log(item)
         return db
-    }
+            .insert({user_id: user_id, item: item})
+            .into('items')
+            .returning('*')
+            .then(([item]) => item)
+    },
+    InsertTask(db, item_id, task) {
+        return db
+            .insert({task: task, item: item_id})
+            .into('tasks')
+            .returning('*')
+            .then(([task]) => task)
 
+    }
 };
 
 module.exports = CleanupsService;

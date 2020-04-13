@@ -57,6 +57,25 @@ bucketlistRouter
             .catch(next)
         }
     })
+    .post(requireAuth, jsonBodyParser, (req, res, next) => {
+        const knexInstance = req.app.get('db')
+        const { type, user_id, item_id, item } = req.body
+        console.log(item)
+
+        if(type === 'item') {
+            BucketlistService.insertItem(knexInstance, user_id, item)
+            .then(
+                res.status(201)
+            )
+            .catch(next)
+        } else {
+            BucketlistService.InsertTask(knexInstance, item_id, item)
+            .then(
+                res.status(201)
+            )
+            .catch(next)
+        }
+    })
 
         
 module.exports = bucketlistRouter;
