@@ -59,7 +59,6 @@ const CleanupsService = {
             )
     },
     insertItem(db, user_id, item) {
-        console.log(item)
         return db
             .insert({user_id: user_id, item: item})
             .into('items')
