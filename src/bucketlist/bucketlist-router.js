@@ -14,10 +14,12 @@ bucketlistRouter
         const knexInstance = req.app.get('db')
         BucketlistService.getItems(knexInstance, req.params.id)
         .then(items  => {
+            // Wait until all promisess are resolved before sending data
             return Promise.all(items.map( item  => {
                     return BucketlistService.getTasks(knexInstance, req.params.id, item.id)
                     .then(task =>  {
                         return ({
+                            // Return an item  as an array too loop with the client
                             item: {
                                 id: item.id,
                                 text: item.item,
@@ -39,6 +41,7 @@ bucketlistRouter
         .catch(next)
         
     })
+    // This  patch is used to set or unset completed for an item or task
     .patch(requireAuth, jsonBodyParser, (req, res, next) => {
         const knexInstance = req.app.get('db')
         const { type, user_id, item_id, task_id, completed } = req.body
